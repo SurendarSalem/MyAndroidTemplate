@@ -73,13 +73,16 @@ public class RestaurantListFragment extends DaggerFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         restaurantListViewModel = new ViewModelProvider(this, viewModelFactory).get(RestaurantListViewModel.class);
-        restaurantListViewModel.getRestaurants().observe(getViewLifecycleOwner(), listResource -> {
+        /*restaurantListViewModel.getRestaurants().observe(getViewLifecycleOwner(), listResource -> {
             if (listResource.status == Status.LOADING) {
                 restaurantListFragmentBinding.progressBar.setVisibility(View.VISIBLE);
             } else {
                 restaurantListFragmentBinding.progressBar.setVisibility(View.GONE);
             }
             restaurantListAdapter.submitList(listResource.data);
+        });*/
+        restaurantListViewModel.getPaging().observe(getViewLifecycleOwner(), listResource -> {
+            restaurantListAdapter.submitList(listResource);
         });
     }
 
@@ -92,7 +95,7 @@ public class RestaurantListFragment extends DaggerFragment {
 
         @Override
         public boolean areContentsTheSame(@NonNull Restaurant oldItem, @NonNull Restaurant newItem) {
-            return newItem == oldItem;
+            return newItem.equals(oldItem);
         }
     }
 }
